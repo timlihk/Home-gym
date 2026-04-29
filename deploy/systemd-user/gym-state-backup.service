@@ -1,0 +1,6 @@
+[Unit]
+Description=Back up Gym app sync state
+
+[Service]
+Type=oneshot
+ExecStart=/lzcsys/data/home/timlihk/bin/backup-gym-state.sh

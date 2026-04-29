@@ -1,0 +1,1003 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=5" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="theme-color" content="#0b0d12" />
+<title>Bulk-Up Home Gym</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        fontFamily: { sans: ['Inter', '-apple-system', 'system-ui', 'sans-serif'] },
+        colors: {
+          ink: { 950: '#0b0d12', 900: '#10131a', 800: '#161a24', 700: '#1f2533' },
+          accent: { 500: '#f97316', 600: '#ea580c' },
+          lime: { 400: '#a3e635' },
+        }
+      }
+    }
+  }
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --safe-top: env(safe-area-inset-top, 0px);
+    --safe-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  html, body {
+    background: radial-gradient(1200px 600px at 80% -10%, #1c2230 0%, #0b0d12 60%) fixed;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-text-size-adjust: 100%;
+  }
+  body { padding-bottom: calc(84px + var(--safe-bottom)); } /* space for bottom nav */
+  .card { background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01)); border:1px solid rgba(255,255,255,0.06); }
+  .pill { border:1px solid rgba(255,255,255,0.08); }
+  .tab-active { background: linear-gradient(180deg, #f97316, #ea580c); color:#0b0d12; }
+  /* iOS: input font-size must be >=16px to prevent auto-zoom on focus */
+  input, select, textarea, button { font-size: 16px; }
+  input[type="number"] { appearance: textfield; }
+  input[type="number"]::-webkit-outer-spin-button, input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+  .glow { box-shadow: 0 0 0 1px rgba(249,115,22,.25), 0 10px 40px -10px rgba(249,115,22,.35); }
+  details > summary::-webkit-details-marker { display:none; }
+  details > summary { list-style:none; cursor:pointer; }
+  .chev { transition: transform .2s ease; }
+  details[open] .chev { transform: rotate(90deg); }
+  /* Horizontal scroll tabs on mobile */
+  .scroll-x { overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+  .scroll-x::-webkit-scrollbar { display: none; }
+  /* Bigger tap targets */
+  .tap { min-height: 44px; }
+  /* Larger, iOS-friendly checkbox */
+  input[type="checkbox"].big { width: 26px; height: 26px; accent-color: #f97316; }
+  /* Bottom nav */
+  .bottom-nav {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 40;
+    padding: 10px 10px calc(10px + var(--safe-bottom));
+    background: rgba(11,13,18,.85);
+    backdrop-filter: saturate(180%) blur(16px);
+    -webkit-backdrop-filter: saturate(180%) blur(16px);
+    border-top: 1px solid rgba(255,255,255,.06);
+  }
+  .bn-btn { flex: 1; min-height: 52px; border-radius: 14px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; font-size: 11px; color: #cbd5e1; }
+  .bn-btn.active { background: linear-gradient(180deg, #f97316, #ea580c); color: #0b0d12; font-weight: 700; }
+  .bn-btn strong { font-size: 14px; }
+  /* Prevent double-tap zoom on buttons */
+  button { touch-action: manipulation; }
+  .video-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 6px;
+    padding: 6px 10px;
+    border-radius: 999px;
+    border: 1px solid rgba(249,115,22,.35);
+    background: rgba(249,115,22,.08);
+    color: #fdba74;
+    font-size: 11px;
+    line-height: 1;
+    text-decoration: none;
+  }
+  .video-btn:hover {
+    background: rgba(249,115,22,.16);
+    color: #ffedd5;
+  }
+  .video-btn svg {
+    width: 14px;
+    height: 14px;
+    flex: 0 0 auto;
+  }
+  .subtle-grid {
+    background-image:
+      linear-gradient(rgba(255,255,255,.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,.03) 1px, transparent 1px);
+    background-size: 20px 20px;
+    background-position: -1px -1px;
+  }
+</style>
+</head>
+<body class="text-slate-100 font-sans min-h-screen">
+
+<!-- Header -->
+<header class="max-w-7xl mx-auto px-4 sm:px-5 pt-6 sm:pt-8 pb-4" style="padding-top: calc(1.5rem + var(--safe-top));">
+  <div class="flex items-center justify-between gap-3 flex-wrap">
+    <div class="flex items-center gap-3 min-w-0">
+      <div class="h-10 w-10 rounded-xl bg-accent-500 text-ink-950 font-extrabold grid place-items-center glow shrink-0">B+</div>
+      <div class="min-w-0">
+        <h1 class="text-xl sm:text-3xl font-extrabold tracking-tight truncate">Bulk-Up Home Gym</h1>
+        <p class="text-slate-400 text-[11px] sm:text-sm mt-0.5 leading-snug">4-day U/L · 手臂胸部翘臀优先 · Bench + barbell + dumbbells · Post-semaglutide</p>
+      </div>
+    </div>
+    <div class="flex items-center gap-2 ml-auto">
+      <div id="syncBadge" class="pill rounded-xl px-3 py-2 text-xs text-slate-300">Sync: starting…</div>
+      <div class="pill rounded-xl px-3 py-2 text-sm flex items-center">
+        <span class="text-slate-400 text-xs mr-1">Wk</span>
+        <button id="weekDown" class="tap px-2 text-slate-400 hover:text-white" aria-label="Previous week">−</button>
+        <span id="weekNum" class="font-semibold px-1">1</span>
+        <button id="weekUp" class="tap px-2 text-slate-400 hover:text-white" aria-label="Next week">+</button>
+      </div>
+      <button id="resetBtn" class="pill rounded-xl px-3 py-2 text-xs sm:text-sm hover:bg-white/5 tap">Reset</button>
+    </div>
+  </div>
+</header>
+
+<!-- Top KPI row -->
+<section class="max-w-7xl mx-auto px-4 sm:px-5 grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3">
+  <div class="card rounded-2xl p-3 sm:p-4">
+    <div class="text-slate-400 text-[10px] sm:text-xs uppercase tracking-wider">Today's focus</div>
+    <div id="kpiFocus" class="text-base sm:text-xl font-bold mt-1 truncate">Upper · Power</div>
+  </div>
+  <div class="card rounded-2xl p-3 sm:p-4">
+    <div class="text-slate-400 text-[10px] sm:text-xs uppercase tracking-wider">Volume</div>
+    <div class="text-base sm:text-xl font-bold mt-1"><span id="kpiVolume">0</span> <span class="text-slate-400 text-xs">lb·reps</span></div>
+  </div>
+  <div class="card rounded-2xl p-3 sm:p-4">
+    <div class="text-slate-400 text-[10px] sm:text-xs uppercase tracking-wider">Sets</div>
+    <div class="text-base sm:text-xl font-bold mt-1"><span id="kpiSets">0</span><span class="text-slate-400 text-xs"> / <span id="kpiTotal">0</span></span></div>
+  </div>
+  <div class="card rounded-2xl p-3 sm:p-4">
+    <div class="text-slate-400 text-[10px] sm:text-xs uppercase tracking-wider">Protein</div>
+    <div class="text-base sm:text-xl font-bold mt-1"><span id="kpiProtein">—</span> <span class="text-slate-400 text-xs">g/day</span></div>
+  </div>
+</section>
+
+<!-- Main grid -->
+<main class="max-w-7xl mx-auto px-4 sm:px-5 pb-8 mt-4 sm:mt-6 grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-5">
+
+  <!-- LEFT: Day tabs + Exercises -->
+  <section class="lg:col-span-2 card rounded-2xl sm:rounded-3xl p-4 sm:p-5">
+    <div id="tabs" class="scroll-x flex gap-2 mb-4 -mx-1 px-1 pb-1"></div>
+    <div id="dayHeader" class="mb-4"></div>
+    <div id="exerciseList" class="space-y-3"></div>
+
+    <div class="mt-6 card rounded-2xl p-4 bg-white/0">
+      <h3 class="font-bold mb-2 text-sm sm:text-base">How to progress each week</h3>
+      <ul class="text-xs sm:text-sm text-slate-300 space-y-1.5 list-disc pl-5">
+        <li><span class="text-white font-semibold">Double-progression:</span> when you hit the top of the rep range on all sets, add 2.5–5 lb next session.</li>
+        <li><span class="text-white font-semibold">RIR 1–3:</span> leave 1–3 reps in reserve on most sets. Last set of accessories can go to near-failure.</li>
+        <li><span class="text-white font-semibold">Rest:</span> 2–3 min on barbell compounds. 60–90 s on dumbbell and bodyweight accessories.</li>
+        <li><span class="text-white font-semibold">Deload</span> every 5–6 weeks: cut sets in half, keep weights.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- RIGHT: weekly schedule + nutrition + recovery -->
+  <section class="space-y-4 sm:space-y-5">
+
+    <!-- Weekly schedule -->
+    <div class="card rounded-2xl sm:rounded-3xl p-4 sm:p-5">
+      <div class="flex items-center justify-between mb-3">
+        <div>
+          <h2 class="font-bold">Calendar</h2>
+          <div id="calendarRange" class="text-[11px] sm:text-xs text-slate-400 mt-0.5">Mon–Sun</div>
+        </div>
+        <div class="flex items-center gap-1">
+          <button id="calPrev" class="pill rounded-lg px-2 py-1 text-xs text-slate-300 hover:bg-white/5 tap" aria-label="Previous week">−</button>
+          <button id="calToday" class="pill rounded-lg px-2 py-1 text-xs text-slate-300 hover:bg-white/5 tap">Today</button>
+          <button id="calNext" class="pill rounded-lg px-2 py-1 text-xs text-slate-300 hover:bg-white/5 tap" aria-label="Next week">+</button>
+        </div>
+      </div>
+      <div id="weekGrid" class="grid grid-cols-7 gap-1.5"></div>
+      <div class="mt-3 text-[11px] sm:text-xs text-slate-400 flex items-center gap-3 sm:gap-4 flex-wrap">
+        <span class="inline-flex items-center gap-2"><span class="h-2.5 w-2.5 rounded-sm bg-accent-500"></span> Lift</span>
+        <span class="inline-flex items-center gap-2"><span class="h-2.5 w-2.5 rounded-sm bg-lime-400"></span> Active rest</span>
+        <span class="inline-flex items-center gap-2"><span class="h-2.5 w-2.5 rounded-sm bg-slate-600"></span> Full rest</span>
+      </div>
+    </div>
+
+    <!-- Nutrition -->
+    <div class="card rounded-2xl sm:rounded-3xl p-4 sm:p-5">
+      <div class="flex items-center justify-between mb-3">
+        <h2 class="font-bold">Bulking nutrition</h2>
+        <span class="text-[11px] sm:text-xs text-slate-400">Post-semaglutide</span>
+      </div>
+      <div class="grid grid-cols-2 gap-3">
+        <label class="text-xs text-slate-400 block">Bodyweight (lb)
+          <input id="bw" type="number" inputmode="decimal" value="170" class="tap mt-1 w-full bg-ink-800 border border-white/10 rounded-lg px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-accent-500">
+        </label>
+        <label class="text-xs text-slate-400 block">Activity
+          <select id="act" class="tap mt-1 w-full bg-ink-800 border border-white/10 rounded-lg px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-accent-500">
+            <option value="1.4">Light (desk)</option>
+            <option value="1.55" selected>Moderate (lift 4×/wk)</option>
+            <option value="1.7">Active (lift + cardio)</option>
+            <option value="1.9">Very active</option>
+          </select>
+        </label>
+        <label class="text-xs text-slate-400 block">Gain pace
+          <select id="goalRate" class="tap mt-1 w-full bg-ink-800 border border-white/10 rounded-lg px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-accent-500">
+            <option value="0.25" selected>Slow lean bulk (0.25%/wk)</option>
+            <option value="0.5">Standard lean bulk (0.5%/wk)</option>
+            <option value="0.75">Aggressive gain (0.75%/wk)</option>
+          </select>
+        </label>
+        <label class="text-xs text-slate-400 block">Appetite / GI
+          <select id="appetite" class="tap mt-1 w-full bg-ink-800 border border-white/10 rounded-lg px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-accent-500">
+            <option value="reduced" selected>Reduced appetite / early fullness</option>
+            <option value="normal">Normal appetite</option>
+          </select>
+        </label>
+      </div>
+      <div class="mt-4 grid grid-cols-4 gap-2 text-center">
+        <div class="pill rounded-xl py-2"><div class="text-[10px] sm:text-xs text-slate-400">kcal</div><div class="font-bold text-sm sm:text-base" id="macKcal">—</div></div>
+        <div class="pill rounded-xl py-2"><div class="text-[10px] sm:text-xs text-slate-400">P (g)</div><div class="font-bold text-sm sm:text-base text-accent-500" id="macP">—</div></div>
+        <div class="pill rounded-xl py-2"><div class="text-[10px] sm:text-xs text-slate-400">C (g)</div><div class="font-bold text-sm sm:text-base" id="macC">—</div></div>
+        <div class="pill rounded-xl py-2"><div class="text-[10px] sm:text-xs text-slate-400">F (g)</div><div class="font-bold text-sm sm:text-base" id="macF">—</div></div>
+      </div>
+      <div class="mt-3 grid grid-cols-3 gap-2 text-center">
+        <div class="pill rounded-xl py-2"><div class="text-[10px] sm:text-xs text-slate-400">Surplus</div><div class="font-bold text-sm sm:text-base" id="macSurplus">—</div></div>
+        <div class="pill rounded-xl py-2"><div class="text-[10px] sm:text-xs text-slate-400">Meals</div><div class="font-bold text-sm sm:text-base" id="macMeals">—</div></div>
+        <div class="pill rounded-xl py-2"><div class="text-[10px] sm:text-xs text-slate-400">Protein / meal</div><div class="font-bold text-sm sm:text-base" id="macPerMeal">—</div></div>
+      </div>
+      <p id="macroNote" class="text-[11px] sm:text-xs text-slate-400 mt-3 leading-relaxed">Start in a small surplus, keep protein high, and let weekly scale trend decide whether calories need to move up.</p>
+    </div>
+
+    <!-- Weekly check-in -->
+    <div class="card rounded-2xl sm:rounded-3xl p-4 sm:p-5 subtle-grid">
+      <div class="flex items-center justify-between mb-3">
+        <h2 class="font-bold">Weekly check-in</h2>
+        <span class="text-[11px] sm:text-xs text-slate-400">7-day avg</span>
+      </div>
+      <div class="grid grid-cols-2 gap-3">
+        <label class="text-xs text-slate-400 block">Last week avg (lb)
+          <input id="avgPrev" type="number" inputmode="decimal" placeholder="168.4" class="tap mt-1 w-full bg-ink-800 border border-white/10 rounded-lg px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-accent-500">
+        </label>
+        <label class="text-xs text-slate-400 block">This week avg (lb)
+          <input id="avgNow" type="number" inputmode="decimal" placeholder="169.0" class="tap mt-1 w-full bg-ink-800 border border-white/10 rounded-lg px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-accent-500">
+        </label>
+      </div>
+      <div class="mt-4 grid grid-cols-3 gap-2 text-center">
+        <div class="pill rounded-xl py-2"><div class="text-[10px] sm:text-xs text-slate-400">Actual</div><div class="font-bold text-sm sm:text-base" id="checkDelta">—</div></div>
+        <div class="pill rounded-xl py-2"><div class="text-[10px] sm:text-xs text-slate-400">Target</div><div class="font-bold text-sm sm:text-base" id="checkTarget">—</div></div>
+        <div class="pill rounded-xl py-2"><div class="text-[10px] sm:text-xs text-slate-400">Adjustment</div><div class="font-bold text-sm sm:text-base" id="checkAdjust">—</div></div>
+      </div>
+      <p id="checkNote" class="text-[11px] sm:text-xs text-slate-400 mt-3 leading-relaxed">Use weekly averages, not day-to-day scale noise. Aim to gain slowly enough that strength climbs without obvious fat rebound.</p>
+    </div>
+
+    <!-- Muscle regain priorities -->
+    <div class="card rounded-2xl sm:rounded-3xl p-4 sm:p-5">
+      <div class="flex items-center justify-between mb-3">
+        <h2 class="font-bold">Muscle regain priorities</h2>
+        <span class="text-[11px] sm:text-xs text-slate-400">Post-cut</span>
+      </div>
+      <ul class="text-xs sm:text-sm text-slate-300 space-y-2">
+        <li class="flex gap-3"><span class="text-accent-500 font-bold">01</span> 先把卧推、上斜推和二头/三头的主动作做强，胸和手臂围度会跟着起来。</li>
+        <li class="flex gap-3"><span class="text-accent-500 font-bold">02</span> Hit 25–40 g high-quality protein across 4–5 feedings if appetite is suppressed.</li>
+        <li class="flex gap-3"><span class="text-accent-500 font-bold">03</span> 划船量不能太低，不然胸推加量后肩膀容易顶不住。</li>
+        <li class="flex gap-3"><span class="text-accent-500 font-bold">04</span> Keep cardio easy. Steps help recovery, but long hard conditioning will fight the surplus.</li>
+        <li class="flex gap-3"><span class="text-accent-500 font-bold">05</span> 翘臀靠 `臀桥/hip hinge/单腿动作` 三件套，不靠随便做几组深蹲。</li>
+        <li class="flex gap-3"><span class="text-accent-500 font-bold">06</span> If semaglutide still blunts appetite, use shakes, yogurt, eggs, milk, rice, oats, and other easy-to-digest calories.</li>
+      </ul>
+    </div>
+
+    <!-- Recovery -->
+    <div class="card rounded-2xl sm:rounded-3xl p-4 sm:p-5">
+      <h2 class="font-bold mb-3">Recovery essentials</h2>
+      <ul class="text-xs sm:text-sm text-slate-300 space-y-2">
+        <li class="flex gap-3"><span class="text-accent-500 font-bold">●</span> Sleep 7–9 h; MPS lives or dies here.</li>
+        <li class="flex gap-3"><span class="text-accent-500 font-bold">●</span> Creatine monohydrate 5 g/day.</li>
+        <li class="flex gap-3"><span class="text-accent-500 font-bold">●</span> Front-load protein: breakfast plus a post-workout feeding is non-negotiable.</li>
+        <li class="flex gap-3"><span class="text-accent-500 font-bold">●</span> 7–10 k steps/day is enough. Don’t turn recovery into extra fat-loss work.</li>
+        <li class="flex gap-3"><span class="text-accent-500 font-bold">●</span> Hydrate aggressively if nausea, constipation, or low appetite are still lingering.</li>
+        <li class="flex gap-3"><span class="text-accent-500 font-bold">●</span> Deload every 5–6 weeks or sooner if performance stalls across two sessions.</li>
+      </ul>
+    </div>
+  </section>
+</main>
+
+<footer class="max-w-7xl mx-auto px-4 sm:px-5 pb-6 text-[11px] sm:text-xs text-slate-500 leading-relaxed">
+  General fitness guidance, not medical advice. If you've recently discontinued semaglutide or have GI issues, check with your doctor before ramping food volume and heavy lifting.
+</footer>
+
+<!-- Mobile bottom nav: quick day switch -->
+<nav class="bottom-nav lg:hidden flex gap-2" id="bottomNav" aria-label="Day picker"></nav>
+
+<script>
+/* -------- Program data -------- */
+const DAYS = [
+  { id: 'upperPower', name: 'Upper · Power', short: 'UP', weekday: 1, exercises: [
+    { name: 'Barbell Bench Press', sets: 5, reps: '5–6',  cue: 'Primary strength anchor. This gets first priority every week.', video: 'https://weighttraining.guide/exercises/bench-press/' },
+    { name: 'Pendlay Row', sets: 4, reps: '5–8', cue: 'Explosive from the floor, controlled back down. This is your main pull.', video: 'https://weighttraining.guide/exercises/barbell-underhand-grip-bent-over-row/' },
+    { name: 'Standing Barbell Overhead Press', sets: 3, reps: '5–8', cue: 'Full-body brace, no layback turning it into an incline press.', video: 'https://weighttraining.guide/exercises/barbell-overhead-press/' },
+    { name: 'One-Arm DB Row', sets: 3, reps: '6–8', cue: 'Heavy unilateral row. Pull toward hip and pause without twisting.', video: 'https://weighttraining.guide/exercises/bent-over-dumbbell-row/' },
+    { name: 'Close-Grip Bench Press', sets: 3, reps: '6–8', cue: 'Secondary press for triceps and extra chest volume.', video: 'https://weighttraining.guide/exercises/close-grip-barbell-bench-press/' },
+    { name: 'DB Hammer Curl', sets: 3, reps: '8–10', cue: 'Keep elbows quiet and build arm thickness.', video: 'https://weighttraining.guide/exercises/dumbbell-hammer-curl/' },
+    { name: 'Barbell Curl', sets: 2, reps: '8–10', cue: 'Strict reps. Your arm strength is a priority, so give curls real effort.', video: 'https://weighttraining.guide/exercises/barbell-curl/' },
+  ]},
+  { id: 'lowerPower', name: 'Lower · Power', short: 'LP', weekday: 2, exercises: [
+    { name: 'Barbell Romanian Deadlift', sets: 4, reps: '5–8',  cue: 'Heavy posterior-chain lift. Brace hard and keep lats locked.', video: 'https://weighttraining.guide/exercises/barbell-romanian-deadlift/' },
+    { name: 'DB Goblet Squat', sets: 4, reps: '6–10', cue: 'Main quad pattern without a rack. If load tops out, pause deep and slow the negative.', video: 'https://weighttraining.guide/exercises/dumbbell-front-squat/' },
+    { name: 'Barbell Glute Bridge', sets: 4, reps: '6–10', cue: 'Drive through heels and pause hard at lockout. This is a primary glute lift, not filler.', video: 'https://weighttraining.guide/exercises/barbell-glute-bridge/' },
+    { name: 'DB Bulgarian Split Squat', sets: 4, reps: '8–10/leg', cue: 'Brutal but efficient. Stay controlled and own the bottom position.', video: 'https://weighttraining.guide/exercises/dumbbell-bulgarian-split-squat/' },
+    { name: 'DB Standing Calf Raise', sets: 4, reps: '12–20', cue: 'Use the bench for balance and make the stretch long.', video: 'https://weighttraining.guide/exercises/standing-dumbbell-one-leg-calf-raise/' },
+    { name: 'Weighted Crunch', sets: 3, reps: '10–15', cue: 'Slow down the eccentric and exhale hard into the crunch.', video: 'https://weighttraining.guide/exercises/crunch/' },
+  ]},
+  { id: 'upperHyp', name: 'Upper · Hypertrophy', short: 'UH', weekday: 4, exercises: [
+    { name: 'Incline DB Bench Press', sets: 4, reps: '8–12', cue: 'Your main upper-chest hypertrophy press. Smooth reps and full ROM.', video: 'https://weighttraining.guide/exercises/incline-dumbbell-bench-press/' },
+    { name: 'Paused Barbell Bench Press', sets: 3, reps: '8–10', cue: 'Extra bench volume with lighter load. Pause to keep the reps honest.', video: 'https://weighttraining.guide/exercises/bench-press/' },
+    { name: 'Chest-Supported DB Row', sets: 4, reps: '8–12', cue: 'This replaces vertical pulling. Squeeze hard at the top and keep chest planted.', video: 'https://weighttraining.guide/exercises/bent-over-dumbbell-row/' },
+    { name: 'Seated DB Shoulder Press', sets: 3, reps: '8–10', cue: 'Stable pressing volume for delts without beating up your lower back.', video: 'https://weighttraining.guide/exercises/seated-dumbbell-overhead-press/' },
+    { name: 'DB Flat Flye', sets: 3, reps: '12–15', cue: 'Stretch-focused chest work. Stop short of shoulder irritation.', video: 'https://weighttraining.guide/exercises/dumbbell-fly/' },
+    { name: 'DB Lateral Raise', sets: 4, reps: '12–20', cue: 'Lead with elbows and keep tension high. These are now a priority lift.', video: 'https://weighttraining.guide/exercises/lateral-raise/' },
+    { name: 'Incline DB Curl', sets: 4, reps: '10–12', cue: 'Long-length biceps work to help fill back out after the cut.', video: 'https://weighttraining.guide/exercises/incline-dumbbell-curl/' },
+    { name: 'DB Overhead Tricep Extension', sets: 4, reps: '10–12', cue: 'Deep stretch and smooth lockout.', video: 'https://weighttraining.guide/exercises/seated-dumbbell-overhead-triceps-extension/' },
+    { name: 'DB Alternating Curl', sets: 2, reps: '12–15', cue: 'Extra biceps pump volume. Control the lowering phase.', video: 'https://weighttraining.guide/exercises/seated-alternating-dumbbell-curl/' },
+    { name: 'DB Skullcrusher', sets: 2, reps: '12–15', cue: 'Short-range lockout work to finish triceps.', video: 'https://weighttraining.guide/exercises/lying-one-arm-dumbbell-triceps-extension/' },
+  ]},
+  { id: 'lowerHyp', name: 'Lower · Hypertrophy', short: 'LH', weekday: 5, exercises: [
+    { name: 'DB Front-Foot-Elevated Split Squat', sets: 4, reps: '10–12/leg', cue: 'Quad-biased unilateral work. Let the knee travel and stay controlled.', video: 'https://weighttraining.guide/exercises/dumbbell-one-leg-split-squat/' },
+    { name: 'Barbell Stiff-Leg Deadlift',  sets: 4, reps: '8–12', cue: 'Stretch > load. Keep the hinge honest and hamstrings loaded.', video: 'https://weighttraining.guide/exercises/barbell-stiff-leg-deadlift/' },
+    { name: 'DB Reverse Lunge', sets: 3, reps: '10/leg', cue: 'Stay upright to bias quads and glutes. Don’t slam the back knee.', video: 'https://weighttraining.guide/exercises/dumbbell-rear-lunge/' },
+    { name: 'DB Step-Up', sets: 3, reps: '10/leg', cue: 'Drive through the working leg and avoid pushing off the floor.', video: 'https://weighttraining.guide/exercises/dumbbell-step-up/' },
+    { name: 'Barbell Glute Bridge', sets: 4, reps: '12–15', cue: 'Higher-rep glute work with a hard squeeze every rep. Chase burn here.', video: 'https://weighttraining.guide/exercises/barbell-glute-bridge/' },
+    { name: 'DB Frog Pump', sets: 2, reps: '20–30', cue: 'End-range glute pump work. Short range, constant tension, no rest at the top.', video: 'https://weighttraining.guide/exercises/frog-pump/' },
+    { name: 'Seated DB Calf Raise',   sets: 4, reps: '15–20', cue: 'Long stretch and hard top squeeze.', video: 'https://weighttraining.guide/exercises/seated-dumbbell-one-leg-calf-raise/' },
+    { name: 'Plank + Dead Bug',   sets: 3, reps: '45 s + 10/side', cue: 'Brace without turning this into a hip-flexor drill.', video: 'https://weighttraining.guide/exercises/dead-bug-with-no-arm-movement/' },
+  ]},
+];
+
+/* -------- State -------- */
+const STORAGE_KEY = 'home-gym-dashboard-v3';
+const LEGACY_STORAGE_KEYS = ['home-gym-dashboard-v2'];
+const SYNC_ENDPOINT = 'https://sync.mangrove-hk.org/api/state';
+const SYNC_PULL_INTERVAL_MS = 30000;
+const SYNC_PUSH_DEBOUNCE_MS = 1200;
+const SYNC_TIMEOUT_MS = 6000;
+const defaultState = {
+  week: 1,
+  activeDay: 'upperPower',
+  activeDate: '',
+  lastSeenDate: '',
+  deviceId: '',
+  updatedAt: 0,
+  log: {},
+  logsByDate: {},
+  metrics: {
+    bw: '170',
+    act: '1.55',
+    goalRate: '0.25',
+    appetite: 'reduced',
+    avgPrev: '',
+    avgNow: '',
+  },
+};
+let state = loadState();
+const syncState = {
+  pushTimer: null,
+  pushInFlight: false,
+  pendingPush: false,
+  intervalId: null,
+  status: 'starting',
+  detail: 'Starting…',
+};
+const uiState = {
+  expandedByDay: {},
+  calendarAnchor: '',
+};
+
+function toISODate(date) {
+  const y = date.getFullYear();
+  const m = String(date.getMonth() + 1).padStart(2, '0');
+  const d = String(date.getDate()).padStart(2, '0');
+  return `${y}-${m}-${d}`;
+}
+
+function todayISO() {
+  return toISODate(new Date());
+}
+
+function parseISODate(iso) {
+  const [y, m, d] = String(iso || todayISO()).split('-').map(Number);
+  return new Date(y, (m || 1) - 1, d || 1);
+}
+
+function addDays(date, days) {
+  const next = new Date(date);
+  next.setDate(next.getDate() + days);
+  return next;
+}
+
+function getMonday(date) {
+  const day = date.getDay() || 7;
+  return addDays(date, 1 - day);
+}
+
+function formatShortDate(iso, opts = {}) {
+  return parseISODate(iso).toLocaleDateString(undefined, {
+    month: 'short',
+    day: 'numeric',
+    ...opts,
+  });
+}
+
+function getScheduledDayId(iso) {
+  const weekday = parseISODate(iso).getDay() || 7;
+  const schedule = {1:'upperPower', 2:'lowerPower', 4:'upperHyp', 5:'lowerHyp'};
+  return schedule[weekday] || '';
+}
+
+function selectDate(iso, { preferScheduled = true } = {}) {
+  state.activeDate = iso;
+  uiState.calendarAnchor = iso;
+  const scheduledDay = getScheduledDayId(iso);
+  if (preferScheduled && scheduledDay) state.activeDay = scheduledDay;
+  saveState();
+  render();
+}
+
+function getExpandedExercises(dayId) {
+  if (!uiState.expandedByDay[dayId]) uiState.expandedByDay[dayId] = new Set([0]);
+  return uiState.expandedByDay[dayId];
+}
+
+function generateDeviceId() {
+  if (window.crypto?.randomUUID) return window.crypto.randomUUID();
+  return `device-${Math.random().toString(36).slice(2)}-${Date.now()}`;
+}
+
+function normalizeState(raw) {
+  const currentDate = todayISO();
+  const lastSeenDate = raw?.lastSeenDate || raw?.activeDate || '';
+  const activeDate = lastSeenDate && lastSeenDate !== currentDate
+    ? currentDate
+    : raw?.activeDate || currentDate;
+  const normalized = {
+    ...structuredClone(defaultState),
+    ...raw,
+    activeDate,
+    lastSeenDate: currentDate,
+    logsByDate: raw?.logsByDate || {},
+    deviceId: raw?.deviceId || generateDeviceId(),
+    updatedAt: Number(raw?.updatedAt || 0),
+    metrics: {
+      ...defaultState.metrics,
+      ...(raw?.metrics || {}),
+    },
+  };
+
+  if (raw?.log && Object.keys(raw.log).length && !Object.keys(normalized.logsByDate).length) {
+    normalized.logsByDate[normalized.activeDate] = raw.log;
+  }
+
+  return {
+    ...normalized,
+    log: {},
+  };
+}
+
+function loadState() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) return normalizeState(JSON.parse(raw));
+
+    for (const legacyKey of LEGACY_STORAGE_KEYS) {
+      const legacyRaw = localStorage.getItem(legacyKey);
+      if (!legacyRaw) continue;
+      const migrated = normalizeState(JSON.parse(legacyRaw));
+      migrated.updatedAt = migrated.updatedAt || Date.now();
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(migrated));
+      return migrated;
+    }
+
+    return normalizeState(defaultState);
+  } catch {
+    return normalizeState(defaultState);
+  }
+}
+
+function saveState({ touch = true, scheduleSync = true } = {}) {
+  if (touch) state.updatedAt = Date.now();
+  state.lastSeenDate = todayISO();
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  if (scheduleSync) queueRemoteSync();
+}
+
+function applyState(nextState, { persist = true, renderUi = true, scheduleSync = false } = {}) {
+  state = normalizeState(nextState);
+  uiState.calendarAnchor = state.activeDate;
+  if (persist) saveState({ touch: false, scheduleSync });
+  if (renderUi) {
+    hydrateInputs();
+    document.getElementById('weekNum').textContent = state.week;
+    render();
+  }
+}
+
+function updateSyncBadge(status, detail) {
+  syncState.status = status;
+  syncState.detail = detail;
+  const badge = document.getElementById('syncBadge');
+  if (!badge) return;
+  badge.textContent = `Sync: ${detail}`;
+  badge.className = 'pill rounded-xl px-3 py-2 text-xs';
+  if (status === 'ok') badge.classList.add('text-lime-400');
+  else if (status === 'busy') badge.classList.add('text-accent-500');
+  else badge.classList.add('text-slate-300');
+}
+
+function fetchWithTimeout(url, options = {}, timeoutMs = SYNC_TIMEOUT_MS) {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), timeoutMs);
+  return fetch(url, { ...options, signal: controller.signal }).finally(() => clearTimeout(timer));
+}
+
+async function pullRemoteState({ initial = false } = {}) {
+  if (!navigator.onLine) {
+    updateSyncBadge('idle', 'offline');
+    return;
+  }
+  updateSyncBadge('busy', initial ? 'connecting…' : 'checking…');
+  try {
+    const res = await fetchWithTimeout(SYNC_ENDPOINT, {
+      method: 'GET',
+      mode: 'cors',
+      cache: 'no-store',
+      headers: { Accept: 'application/json' },
+    });
+    if (!res.ok) throw new Error(`GET ${res.status}`);
+    const payload = await res.json();
+    const remoteState = payload?.state ? normalizeState(payload.state) : null;
+    const localUpdatedAt = Number(state.updatedAt || 0);
+    const remoteUpdatedAt = Number(remoteState?.updatedAt || 0);
+
+    if (!remoteState) {
+      if (localUpdatedAt > 0) {
+        await pushRemoteState();
+      } else {
+        updateSyncBadge('ok', 'ready');
+      }
+      return;
+    }
+
+    if (remoteUpdatedAt > localUpdatedAt) {
+      applyState(remoteState, { persist: true, renderUi: true, scheduleSync: false });
+      updateSyncBadge('ok', 'pulled');
+      return;
+    }
+
+    if (localUpdatedAt > remoteUpdatedAt) {
+      await pushRemoteState();
+      return;
+    }
+
+    updateSyncBadge('ok', 'synced');
+  } catch (err) {
+    console.error('Pull sync failed', err);
+    updateSyncBadge('idle', 'local only');
+  }
+}
+
+async function pushRemoteState() {
+  if (!navigator.onLine) {
+    updateSyncBadge('idle', 'offline');
+    return;
+  }
+  syncState.pushInFlight = true;
+  updateSyncBadge('busy', 'saving…');
+  try {
+    const res = await fetchWithTimeout(SYNC_ENDPOINT, {
+      method: 'PUT',
+      mode: 'cors',
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+      },
+      body: JSON.stringify({ state }),
+    });
+    if (!res.ok) throw new Error(`PUT ${res.status}`);
+    const payload = await res.json();
+    if (payload?.state?.updatedAt && payload.state.updatedAt !== state.updatedAt) {
+      applyState(payload.state, { persist: true, renderUi: true, scheduleSync: false });
+    }
+    updateSyncBadge('ok', 'synced');
+  } catch (err) {
+    console.error('Push sync failed', err);
+    updateSyncBadge('idle', 'local only');
+  } finally {
+    syncState.pushInFlight = false;
+    if (syncState.pendingPush) {
+      syncState.pendingPush = false;
+      queueRemoteSync();
+    }
+  }
+}
+
+function queueRemoteSync() {
+  if (syncState.pushInFlight) {
+    syncState.pendingPush = true;
+    return;
+  }
+  clearTimeout(syncState.pushTimer);
+  syncState.pushTimer = setTimeout(() => {
+    pushRemoteState();
+  }, SYNC_PUSH_DEBOUNCE_MS);
+}
+
+function startRemoteSync() {
+  pullRemoteState({ initial: true });
+  clearInterval(syncState.intervalId);
+  syncState.intervalId = setInterval(() => {
+    pullRemoteState();
+  }, SYNC_PULL_INTERVAL_MS);
+  window.addEventListener('online', () => pullRemoteState());
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible') pullRemoteState();
+  });
+}
+
+/* -------- Build tabs (top) -------- */
+const tabs = document.getElementById('tabs');
+DAYS.forEach(d => {
+  const b = document.createElement('button');
+  b.className = 'pill px-3 py-2 rounded-xl text-sm transition tap shrink-0';
+  b.dataset.id = d.id;
+  b.innerHTML = `<span class="font-semibold">${d.short}</span> <span class="text-slate-400 ml-1 hidden sm:inline">${d.name.split(' · ')[1]}</span>`;
+  b.onclick = () => { state.activeDay = d.id; saveState(); render(); };
+  tabs.appendChild(b);
+});
+
+/* -------- Build bottom nav (mobile) -------- */
+const bottomNav = document.getElementById('bottomNav');
+DAYS.forEach(d => {
+  const b = document.createElement('button');
+  b.className = 'bn-btn';
+  b.dataset.id = d.id;
+  const parts = d.name.split(' · ');
+  b.innerHTML = `<strong>${d.short}</strong><span>${parts[1]}</span>`;
+  b.onclick = () => { state.activeDay = d.id; saveState(); render(); window.scrollTo({top:0,behavior:'smooth'}); };
+  bottomNav.appendChild(b);
+});
+
+function ensureLog(dayId, exIdx, sets) {
+  const dateKey = state.activeDate || todayISO();
+  if (!state.logsByDate[dateKey]) state.logsByDate[dateKey] = {};
+  if (!state.logsByDate[dateKey][dayId]) state.logsByDate[dateKey][dayId] = {};
+  if (!state.logsByDate[dateKey][dayId][exIdx]) {
+    state.logsByDate[dateKey][dayId][exIdx] = Array.from({length: sets}, () => ({weight: '', reps: '', done: false}));
+  }
+}
+
+function getDayLog(dayId, dateKey = state.activeDate || todayISO()) {
+  if (!state.logsByDate[dateKey]) state.logsByDate[dateKey] = {};
+  if (!state.logsByDate[dateKey][dayId]) state.logsByDate[dateKey][dayId] = {};
+  return state.logsByDate[dateKey][dayId];
+}
+
+function calculateDayStats(dayId) {
+  const day = DAYS.find((item) => item.id === dayId);
+  let totalSets = 0;
+  let doneSets = 0;
+  let volume = 0;
+  if (!day) return { totalSets, doneSets, volume };
+
+  day.exercises.forEach((ex, exIdx) => {
+    ensureLog(day.id, exIdx, ex.sets);
+    totalSets += ex.sets;
+    const rows = getDayLog(day.id)[exIdx];
+    rows.forEach((r) => {
+      if (r.done) doneSets++;
+      const w = parseFloat(r.weight) || 0;
+      const rp = parseFloat(r.reps) || 0;
+      if (r.done) volume += w * rp;
+    });
+  });
+
+  return { totalSets, doneSets, volume };
+}
+
+function updateDayStats() {
+  const { totalSets, doneSets, volume } = calculateDayStats(state.activeDay);
+  document.getElementById('kpiSets').textContent = doneSets;
+  document.getElementById('kpiTotal').textContent = totalSets;
+  document.getElementById('kpiVolume').textContent = Math.round(volume).toLocaleString();
+}
+
+function updateExerciseProgress(dayId, exIdx) {
+  const rows = getDayLog(dayId)[exIdx] || [];
+  const doneCount = rows.filter((row) => row.done).length;
+  const exDone = rows.length > 0 && rows.every((row) => row.done);
+  const details = document.querySelector(`details[data-day="${dayId}"][data-exidx="${exIdx}"]`);
+  if (!details) return;
+  const progress = details.querySelector('.exercise-progress');
+  if (!progress) return;
+  progress.textContent = `${doneCount}/${rows.length}`;
+  progress.classList.toggle('text-lime-400', exDone);
+  progress.classList.toggle('text-slate-400', !exDone);
+}
+
+function getWeightGuide(exerciseName) {
+  if (exerciseName.includes('Barbell') || exerciseName.includes('Pendlay Row') || exerciseName.includes('Close-Grip Bench Press')) {
+    return 'Weight = total barbell load';
+  }
+  if (exerciseName.includes('One-Arm DB')) {
+    return 'Weight = working arm dumbbell only';
+  }
+  if (exerciseName.includes('DB')) {
+    return 'Weight = one dumbbell / per hand';
+  }
+  if (exerciseName.includes('Weighted')) {
+    return 'Weight = added external load only';
+  }
+  return 'Weight = load used for this movement';
+}
+
+/* -------- Render exercise list -------- */
+function render() {
+  if (!state.activeDate) state.activeDate = todayISO();
+  if (!uiState.calendarAnchor) uiState.calendarAnchor = state.activeDate;
+
+  Array.from(tabs.children).forEach(ch => {
+    ch.classList.toggle('tab-active', ch.dataset.id === state.activeDay);
+    ch.classList.toggle('text-slate-300', ch.dataset.id !== state.activeDay);
+  });
+  Array.from(bottomNav.children).forEach(ch => {
+    ch.classList.toggle('active', ch.dataset.id === state.activeDay);
+  });
+
+  const day = DAYS.find(d => d.id === state.activeDay);
+  document.getElementById('kpiFocus').textContent = day.name;
+  const scheduledDayId = getScheduledDayId(state.activeDate);
+  const selectedDateText = `${formatShortDate(state.activeDate, { weekday: 'short' })}${state.activeDate === todayISO() ? ' · Today' : ''}`;
+  const scheduleText = scheduledDayId
+    ? `Scheduled: ${DAYS.find(d => d.id === scheduledDayId).name}`
+    : 'Scheduled: recovery day';
+
+  document.getElementById('dayHeader').innerHTML = `
+    <div class="flex items-end justify-between flex-wrap gap-2">
+      <div>
+        <div class="text-[10px] sm:text-xs uppercase tracking-wider text-slate-400">${selectedDateText}</div>
+        <div class="text-xl sm:text-2xl font-extrabold">${day.name}</div>
+        <div class="text-[11px] sm:text-xs text-slate-400 mt-1">${scheduleText}</div>
+      </div>
+      <div class="text-[11px] sm:text-xs text-slate-400">${day.exercises.length} exercises · ~60–75 min · date-specific log</div>
+    </div>
+  `;
+
+  const list = document.getElementById('exerciseList');
+  list.innerHTML = '';
+  const expandedExercises = getExpandedExercises(day.id);
+  day.exercises.forEach((ex, exIdx) => {
+    ensureLog(day.id, exIdx, ex.sets);
+    const rows = getDayLog(day.id)[exIdx];
+    const exDone = rows.every(r => r.done);
+    const weightGuide = getWeightGuide(ex.name);
+
+    const exEl = document.createElement('details');
+    exEl.className = 'card rounded-2xl p-3 sm:p-4';
+    exEl.dataset.day = day.id;
+    exEl.dataset.exidx = String(exIdx);
+    exEl.open = expandedExercises.has(exIdx);
+    exEl.innerHTML = `
+      <summary class="flex items-start justify-between gap-3 tap">
+        <div class="flex items-start gap-2 min-w-0">
+          <span class="chev text-slate-400 mt-0.5">▸</span>
+          <div class="min-w-0">
+            <div class="font-semibold text-sm sm:text-base">${ex.name} <span class="text-slate-500 font-normal text-xs sm:text-sm whitespace-nowrap">· ${ex.sets} × ${ex.reps}</span></div>
+            <div class="text-[11px] sm:text-xs text-slate-400 mt-0.5 leading-snug">${ex.cue}</div>
+            <div class="text-[11px] sm:text-xs text-slate-500 mt-1">${weightGuide}</div>
+            <div class="mt-1">
+              <a
+                href="${ex.video}"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="video-btn"
+                aria-label="Open exercise demo for ${ex.name}"
+                title="Open exercise demo for ${ex.name}"
+              >
+                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M12 3.25a8.75 8.75 0 1 0 0 17.5a8.75 8.75 0 0 0 0-17.5Z" stroke="currentColor" stroke-width="1.8"/>
+                  <path d="M10 8.8v6.4l5.1-3.2L10 8.8Z" fill="currentColor"/>
+                </svg>
+                <span>Demo</span>
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="exercise-progress text-xs ${exDone ? 'text-lime-400' : 'text-slate-400'} shrink-0 mt-0.5">${rows.filter(r=>r.done).length}/${ex.sets}</div>
+      </summary>
+      <div class="mt-3">
+        <div class="grid grid-cols-[32px_1fr_1fr_44px] gap-2 items-center text-[11px] sm:text-xs text-slate-400 pb-1">
+          <div>Set</div><div>Weight (lb)</div><div>Reps</div><div class="text-center">Done</div>
+        </div>
+        ${rows.map((r, i) => `
+          <div class="grid grid-cols-[32px_1fr_1fr_44px] gap-2 items-center py-1">
+            <div class="text-slate-400 text-sm">${i+1}</div>
+            <input data-d="${day.id}" data-e="${exIdx}" data-s="${i}" data-f="weight" type="number" inputmode="decimal" value="${r.weight}" placeholder="—" class="tap bg-ink-800 border border-white/10 rounded-lg px-2 py-2 focus:outline-none focus:ring-2 focus:ring-accent-500 w-full">
+            <input data-d="${day.id}" data-e="${exIdx}" data-s="${i}" data-f="reps" type="number" inputmode="numeric" value="${r.reps}" placeholder="—" class="tap bg-ink-800 border border-white/10 rounded-lg px-2 py-2 focus:outline-none focus:ring-2 focus:ring-accent-500 w-full">
+            <div class="flex justify-center"><input data-d="${day.id}" data-e="${exIdx}" data-s="${i}" data-f="done" type="checkbox" ${r.done ? 'checked':''} class="big"></div>
+          </div>
+        `).join('')}
+      </div>
+    `;
+    exEl.addEventListener('toggle', () => {
+      const expanded = getExpandedExercises(day.id);
+      if (exEl.open) expanded.add(exIdx);
+      else expanded.delete(exIdx);
+    });
+    list.appendChild(exEl);
+  });
+
+  list.querySelectorAll('input').forEach(inp => {
+    inp.addEventListener('input', onLogChange);
+    inp.addEventListener('change', onLogChange);
+  });
+
+  updateDayStats();
+  renderWeek();
+  renderMacros();
+  renderCheckin();
+}
+
+function onLogChange(e) {
+  const {d, e: eIdx, s, f} = e.target.dataset;
+  const row = getDayLog(d)[eIdx][s];
+  row[f] = f === 'done' ? e.target.checked : e.target.value;
+  saveState();
+  updateDayStats();
+  if (f === 'done') updateExerciseProgress(d, eIdx);
+}
+
+/* -------- Week grid -------- */
+function renderWeek() {
+  const grid = document.getElementById('weekGrid');
+  grid.innerHTML = '';
+  const labels = ['M','T','W','T','F','S','S'];
+  const anchor = parseISODate(uiState.calendarAnchor || state.activeDate || todayISO());
+  const monday = getMonday(anchor);
+  const sunday = addDays(monday, 6);
+  document.getElementById('calendarRange').textContent = `${formatShortDate(toISODate(monday))}–${formatShortDate(toISODate(sunday), { year: 'numeric' })}`;
+
+  for (let i = 0; i < 7; i++) {
+    const date = addDays(monday, i);
+    const iso = toISODate(date);
+    const dayId = getScheduledDayId(iso);
+    const active = iso === state.activeDate;
+    const isToday = iso === todayISO();
+    const dayLog = dayId ? (state.logsByDate?.[iso]?.[dayId] || {}) : {};
+    const hasLoggedSets = Object.values(dayLog).some((rows) => Array.isArray(rows) && rows.some((row) => row.done || row.weight || row.reps));
+    let bg = 'bg-slate-700/40 text-slate-200', label = 'Rest';
+    if (dayId) { bg = 'bg-accent-500/80 text-ink-950'; label = DAYS.find(d=>d.id===dayId).short; }
+    else if (i === 2 || i === 5) { bg = 'bg-lime-400/70 text-ink-950'; label = 'Walk'; }
+    const cell = document.createElement('button');
+    cell.className = `rounded-lg py-2 text-[11px] font-bold tap relative ${bg} ${active ? 'ring-2 ring-white/70' : ''}`;
+    cell.innerHTML = `
+      <div class="text-[10px] opacity-80 font-semibold">${labels[i]}</div>
+      <div>${date.getDate()}</div>
+      <div class="text-[10px] opacity-90">${label}</div>
+      ${isToday ? '<span class="absolute top-1 right-1 h-1.5 w-1.5 rounded-full bg-white/80"></span>' : ''}
+      ${hasLoggedSets ? '<span class="absolute bottom-1 right-1 h-1.5 w-1.5 rounded-full bg-ink-950/80"></span>' : ''}
+    `;
+    cell.onclick = () => selectDate(iso);
+    grid.appendChild(cell);
+  }
+}
+
+/* -------- Macros -------- */
+function renderMacros() {
+  const bw = parseFloat(document.getElementById('bw').value) || 0;
+  const act = parseFloat(document.getElementById('act').value) || 1.55;
+  const goalRate = parseFloat(document.getElementById('goalRate').value) || 0.25;
+  const appetite = document.getElementById('appetite').value;
+  const maintenance = bw * 14.5 * (act / 1.55);
+  const surplus = goalRate <= 0.25 ? 175 : goalRate <= 0.5 ? 275 : 375;
+  const kcal = Math.round(maintenance + surplus);
+  const proteinFactor = appetite === 'reduced' ? 1.0 : 0.9;
+  const protein = Math.round(bw * proteinFactor);
+  const fat = Math.round(Math.max(bw * 0.3, (kcal * 0.25) / 9));
+  const carbs = Math.round((kcal - protein*4 - fat*9) / 4);
+  const meals = appetite === 'reduced' ? 5 : 4;
+  const proteinPerMeal = Math.round(protein / meals);
+  document.getElementById('macKcal').textContent = kcal.toLocaleString();
+  document.getElementById('macP').textContent = protein;
+  document.getElementById('macC').textContent = carbs;
+  document.getElementById('macF').textContent = fat;
+  document.getElementById('macSurplus').textContent = `+${surplus}`;
+  document.getElementById('macMeals').textContent = meals;
+  document.getElementById('macPerMeal').textContent = `${proteinPerMeal} g`;
+  document.getElementById('kpiProtein').textContent = protein;
+  document.getElementById('macroNote').textContent =
+    appetite === 'reduced'
+      ? `Use ${meals} smaller feedings, lean on shakes or easy-digesting foods, and treat the calorie target as a floor on training days.`
+      : `Aim to gain about ${goalRate}% of bodyweight per week. If your 7-day average stalls for 2 weeks, add 100–150 kcal/day.`;
+}
+
+function renderCheckin() {
+  const bw = parseFloat(document.getElementById('bw').value) || 0;
+  const goalRate = parseFloat(document.getElementById('goalRate').value) || 0.25;
+  const prev = parseFloat(document.getElementById('avgPrev').value);
+  const now = parseFloat(document.getElementById('avgNow').value);
+  const targetGain = bw * (goalRate / 100);
+  document.getElementById('checkTarget').textContent = `${targetGain.toFixed(1)} lb`;
+  if (!prev || !now) {
+    document.getElementById('checkDelta').textContent = '—';
+    document.getElementById('checkAdjust').textContent = '—';
+    document.getElementById('checkNote').textContent = 'Log two weekly averages. Adjust calories only from trend, not from one heavy or light weigh-in.';
+    return;
+  }
+  const delta = now - prev;
+  let adjust = 'Hold';
+  let note = 'Your gain rate is close enough. Keep training hard and don’t change calories mid-week.';
+  if (delta < targetGain - 0.3) {
+    adjust = '+100';
+    note = 'Weight is moving too slowly for a bulk. Add roughly 100 kcal/day, mostly from carbs.';
+  } else if (delta > targetGain + 0.4) {
+    adjust = '-100';
+    note = 'Rate of gain is too fast. Pull back about 100 kcal/day to keep the bulk leaner.';
+  }
+  document.getElementById('checkDelta').textContent = `${delta >= 0 ? '+' : ''}${delta.toFixed(1)} lb`;
+  document.getElementById('checkAdjust').textContent = adjust;
+  document.getElementById('checkNote').textContent = note;
+}
+
+['bw', 'avgPrev', 'avgNow'].forEach(id => {
+  document.getElementById(id).addEventListener('input', syncMetrics);
+});
+['act', 'goalRate', 'appetite'].forEach(id => {
+  document.getElementById(id).addEventListener('change', syncMetrics);
+});
+
+function syncMetrics() {
+  state.metrics = {
+    bw: document.getElementById('bw').value,
+    act: document.getElementById('act').value,
+    goalRate: document.getElementById('goalRate').value,
+    appetite: document.getElementById('appetite').value,
+    avgPrev: document.getElementById('avgPrev').value,
+    avgNow: document.getElementById('avgNow').value,
+  };
+  saveState();
+  renderMacros();
+  renderCheckin();
+}
+
+document.getElementById('weekUp').onclick = () => {
+  state.week++;
+  document.getElementById('weekNum').textContent = state.week;
+  saveState();
+};
+document.getElementById('weekDown').onclick = () => {
+  state.week = Math.max(1, state.week - 1);
+  document.getElementById('weekNum').textContent = state.week;
+  saveState();
+};
+
+document.getElementById('calPrev').onclick = () => {
+  uiState.calendarAnchor = toISODate(addDays(parseISODate(uiState.calendarAnchor || state.activeDate), -7));
+  renderWeek();
+};
+document.getElementById('calNext').onclick = () => {
+  uiState.calendarAnchor = toISODate(addDays(parseISODate(uiState.calendarAnchor || state.activeDate), 7));
+  renderWeek();
+};
+document.getElementById('calToday').onclick = () => selectDate(todayISO());
+
+document.getElementById('resetBtn').onclick = () => {
+  if (!confirm(`Clear logged sets for ${state.activeDate || todayISO()}?`)) return;
+  const dateKey = state.activeDate || todayISO();
+  delete state.logsByDate[dateKey];
+  saveState();
+  render();
+};
+
+function hydrateInputs() {
+  document.getElementById('bw').value = state.metrics.bw;
+  document.getElementById('act').value = state.metrics.act;
+  document.getElementById('goalRate').value = state.metrics.goalRate;
+  document.getElementById('appetite').value = state.metrics.appetite;
+  document.getElementById('avgPrev').value = state.metrics.avgPrev;
+  document.getElementById('avgNow').value = state.metrics.avgNow;
+}
+
+hydrateInputs();
+if (!state.activeDate) state.activeDate = todayISO();
+uiState.calendarAnchor = state.activeDate;
+document.getElementById('weekNum').textContent = state.week;
+render();
+startRemoteSync();
+</script>
+</body>
+</html>
