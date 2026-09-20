@@ -4,9 +4,9 @@ After=network-online.target
 
 [Service]
 Type=simple
-WorkingDirectory=%h/gym-sync
+WorkingDirectory=%h/Code/gym-sync
 Environment=NODE_ENV=production
-ExecStart=/lzcsys/data/home/timlihk/.local/share/mise/shims/node %h/gym-sync/server.mjs
+ExecStart=/lzcsys/data/home/timlihk/.local/share/mise/shims/node %h/Code/gym-sync/server.mjs
 Restart=always
 RestartSec=3
 

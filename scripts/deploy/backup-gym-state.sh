@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-SOURCE_FILE="${SOURCE_FILE:-/lzcsys/data/home/timlihk/gym-sync/state.json}"
+SOURCE_FILE="${SOURCE_FILE:-/lzcsys/data/home/timlihk/Code/gym-sync/state.json}"
 BACKUP_DIR="${BACKUP_DIR:-/lzcsys/data/home/timlihk/backup/gym-sync}"
 RETENTION_DAYS="${RETENTION_DAYS:-45}"
 TIMESTAMP="$(date +%Y%m%d_%H%M%S)"

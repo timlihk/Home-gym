@@ -9,13 +9,13 @@ https://gym.mangrove-hk.org
   -> Cloudflare DNS / Tunnel
   -> mangrove-nas tunnel on lazycat-NAS
   -> http://127.0.0.1:4318/
-  -> ~/gym-sync/index.html
+  -> ~/Code/gym-sync/index.html
 
 https://sync.mangrove-hk.org/api/state
   -> Cloudflare DNS / Tunnel
   -> mangrove-nas tunnel on lazycat-NAS
   -> http://127.0.0.1:4318/api/state
-  -> ~/gym-sync/state.json
+  -> ~/Code/gym-sync/state.json
 ```
 
 ## Production Pieces
@@ -25,10 +25,10 @@ https://sync.mangrove-hk.org/api/state
 | Public app | `https://gym.mangrove-hk.org` |
 | Sync API | `https://sync.mangrove-hk.org/api/state` |
 | NAS SSH host | `lazycat-NAS` |
-| NAS directory | `/lzcsys/data/home/timlihk/gym-sync` |
+| NAS directory | `/lzcsys/data/home/timlihk/Code/gym-sync` |
 | App/sync service | user systemd `gym-sync.service` |
 | Tunnel process | detached `cloudflared tunnel --config ... run` process |
-| State file | `/lzcsys/data/home/timlihk/gym-sync/state.json` |
+| State file | `/lzcsys/data/home/timlihk/Code/gym-sync/state.json` |
 | Backup timer | user systemd `gym-state-backup.timer` |
 | Backup directory | `/lzcsys/data/home/timlihk/backup/gym-sync` |
 
@@ -37,8 +37,8 @@ https://sync.mangrove-hk.org/api/state
 From this folder:
 
 ```bash
-rsync -az index.html nas-sync/server.mjs nas-sync/gym-sync.service lazycat-NAS:/lzcsys/data/home/timlihk/gym-sync/
-ssh lazycat-NAS 'cp ~/gym-sync/gym-sync.service ~/.config/systemd/user/gym-sync.service'
+rsync -az index.html nas-sync/server.mjs nas-sync/gym-sync.service lazycat-NAS:/lzcsys/data/home/timlihk/Code/gym-sync/
+ssh lazycat-NAS 'cp ~/Code/gym-sync/gym-sync.service ~/.config/systemd/user/gym-sync.service'
 ssh lazycat-NAS 'systemctl --user daemon-reload'
 ssh lazycat-NAS 'systemctl --user enable --now gym-sync.service'
 ssh lazycat-NAS 'systemctl --user restart gym-sync.service'
@@ -115,8 +115,8 @@ Retention defaults to 45 days in `scripts/deploy/backup-gym-state.sh`.
 
 ```bash
 ssh lazycat-NAS 'systemctl --user stop gym-sync.service'
-ssh lazycat-NAS 'cp ~/backup/gym-sync/state_latest.json ~/gym-sync/state.json'
-ssh lazycat-NAS 'python3 -m json.tool ~/gym-sync/state.json >/dev/null'
+ssh lazycat-NAS 'cp ~/backup/gym-sync/state_latest.json ~/Code/gym-sync/state.json'
+ssh lazycat-NAS 'python3 -m json.tool ~/Code/gym-sync/state.json >/dev/null'
 ssh lazycat-NAS 'systemctl --user start gym-sync.service'
 ```
 
